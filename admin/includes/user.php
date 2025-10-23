@@ -4,6 +4,8 @@
 class User
 {
 
+    protected static $db_table = "users";
+    protected static $db_table_fields = array('username', 'password', 'first_name', 'last_name');
     public $id;
     public $username;
     public $password;
@@ -104,38 +106,82 @@ class User
 
     }
 
+    protected function properties()
+    {
 
-    public function create() {
+
+        // return get_object_vars($this);
+
+        $properties = array();
+
+        foreach (self::$db_table_fields as $db_field) {
+
+            if (property_exists($this, $db_field)) {
+
+                $properties[$db_field] = $this->$db_field;
+
+            }
+
+        }
+
+        return $properties;
+    }
+
+    protected function clean_properties() {
+        global $database;
+        $clean_properties = array();
+
+        foreach($this->properties() as $key => $value) {
+            $clean_properties[$key] = $database->escapeString($value);
+        }
+
+        return $clean_properties;
+    }
+
+
+    public function save()
+    {
+        return isset($this->id) ? $this->update() : $this->create();
+    }
+
+
+    public function create()
+    {
         global $database;
 
-        $sql = "INSERT INTO users (username, password, first_name, last_name)";
-        $sql .= "VALUES ('";
-        $sql .= $database->escapeString($this->username) . "', '";
-        $sql .= $database->escapeString($this->password) . "', '";
-        $sql .= $database->escapeString($this->first_name) . "', '";
-        $sql .= $database->escapeString($this->last_name) . "')";
+        $properties = $this->clean_properties();
 
-        if($database->query($sql)) {
+        $sql = "INSERT INTO " . self::$db_table . "(" . implode(",", array_keys($properties)) . ")";
+        $sql .= "VALUES ('" . implode("','", array_values($properties)) . "')";
+
+        if ($database->query($sql)) {
 
             $this->id = $database->insert_id();
             return true;
 
         } else {
-            
+
             return false;
         }
-         
+
     }
 
-    public function update() {
+    public function update()
+    {
         global $database;
 
-        $sql = "UPDATE users SET 
-        username='" . $database->escapeString($this->username) . "', 
-        password='" . $database->escapeString($this->password) . "', 
-        first_name='" . $database->escapeString($this->first_name) . "', 
-        last_name='" . $database->escapeString($this->last_name) . "' 
-        WHERE id=" . $database->escapeString($this->id);
+        $properties = $this->clean_properties();
+        $properties_pair = array();
+
+        foreach ($properties as $key => $value) {
+
+            $properties_pair[] = "{$key}='{$value}'";
+
+        }
+
+        $sql = "UPDATE " . self::$db_table . " SET "
+            . implode(", ", $properties_pair) .
+            " WHERE id=" . $database->escapeString($this->id);
 
         $database->query($sql);
 
@@ -143,11 +189,12 @@ class User
 
     }
 
-    public function delete() {
+    public function delete()
+    {
 
         global $database;
 
-        $sql = "DELETE FROM users WHERE id=" . $database->escapeString($this->id) . " LIMIT 1";
+        $sql = "DELETE FROM " . self::$db_table . " WHERE id=" . $database->escapeString($this->id) . " LIMIT 1";
 
         $database->query($sql);
 

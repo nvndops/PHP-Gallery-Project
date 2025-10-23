@@ -33,16 +33,24 @@
 
             // $user->create();
 
+            $user = User::findUserById(10);
+
+            $user->username = "BananasLOL";
+            $user->password = "123banene";
+            $user->first_name = "Banene";
+            $user->last_name = "Bananas";
+            
+
+            $user->update();
+
+
             // $user = User::findUserById(2);
 
-            // $user->last_name = "Bonkers";
+            // $user->delete();
 
-            // $user->update();
-
-
-            $user = User::findUserById(2);
-
-            $user->delete();
+            // $user = User::findUserById(8);
+            // $user->username = "Bazinga";
+            // $user->save();
 
             ?>
 
