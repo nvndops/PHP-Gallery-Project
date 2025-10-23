@@ -7,8 +7,8 @@ class User
     public $id;
     public $username;
     public $password;
-    public $firstName;
-    public $lastName;
+    public $first_name;
+    public $last_name;
 
 
     public static function findThisQuery($sql)
@@ -102,6 +102,56 @@ class User
 
         return array_key_exists($userRecordField, $objectProperties);
 
+    }
+
+
+    public function create() {
+        global $database;
+
+        $sql = "INSERT INTO users (username, password, first_name, last_name)";
+        $sql .= "VALUES ('";
+        $sql .= $database->escapeString($this->username) . "', '";
+        $sql .= $database->escapeString($this->password) . "', '";
+        $sql .= $database->escapeString($this->first_name) . "', '";
+        $sql .= $database->escapeString($this->last_name) . "')";
+
+        if($database->query($sql)) {
+
+            $this->id = $database->insert_id();
+            return true;
+
+        } else {
+            
+            return false;
+        }
+         
+    }
+
+    public function update() {
+        global $database;
+
+        $sql = "UPDATE users SET 
+        username='" . $database->escapeString($this->username) . "', 
+        password='" . $database->escapeString($this->password) . "', 
+        first_name='" . $database->escapeString($this->first_name) . "', 
+        last_name='" . $database->escapeString($this->last_name) . "' 
+        WHERE id=" . $database->escapeString($this->id);
+
+        $database->query($sql);
+
+        return (mysqli_affected_rows($database->connection) == 1) ? true : false;
+
+    }
+
+    public function delete() {
+
+        global $database;
+
+        $sql = "DELETE FROM users WHERE id=" . $database->escapeString($this->id) . " LIMIT 1";
+
+        $database->query($sql);
+
+        return (mysqli_affected_rows($database->connection) == 1) ? true : false;
     }
 
 

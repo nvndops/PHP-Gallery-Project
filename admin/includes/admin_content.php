@@ -20,33 +20,29 @@
 
             <?php
 
-
-            //$user = new User();
-            
-            // $resultSet = $user->findAllUsers();
-            // $resultSet = User::findAllUsers();
-
-            // //$userFound = mysqli_fetch_array($result);
-            
-            // while ($row = mysqli_fetch_array($resultSet)) {
-
-            //     echo $row['username'] . "<br>";
-
-            // }
-
-            
-
             // $foundUser = User::findUserById(3);
 
-            // $user = User::instantiation($foundUser);
+            // echo $foundUser->username;
+
+            // $user = new User();
+
+            // $user->username = "hades";
+            // $user->password = "123";
+            // $user->first_name = "King of";
+            // $user->last_name = "Underworld";
+
+            // $user->create();
+
+            // $user = User::findUserById(2);
+
+            // $user->last_name = "Bonkers";
+
+            // $user->update();
 
 
-            // echo $user->username;
+            $user = User::findUserById(2);
 
-            $foundUser = User::findUserById(3);
-
-            echo $foundUser->username;
-
+            $user->delete();
 
             ?>
 
