@@ -33,15 +33,15 @@
 
             // $user->create();
 
-            $user = User::findUserById(10);
+            // $user = User::findUserById(10);
 
-            $user->username = "BananasLOL";
-            $user->password = "123banene";
-            $user->first_name = "Banene";
-            $user->last_name = "Bananas";
+            // $user->username = "BananasLOL";
+            // $user->password = "123banene";
+            // $user->first_name = "Banene";
+            // $user->last_name = "Bananas";
             
 
-            $user->update();
+            // $user->update();
 
 
             // $user = User::findUserById(2);
@@ -49,8 +49,28 @@
             // $user->delete();
 
             // $user = User::findUserById(8);
-            // $user->username = "Bazinga";
+            // $user = new User();
+            // $user->username = "New User";
             // $user->save();
+
+            // $photos = Photo::findAll();
+
+            // foreach ($photos as $photo) {
+            //     echo $photo->title;
+            // }
+
+            // $photo = new Photo();
+
+            // $photo->title = "Supergiant Games";
+            // $photo->size = 20;
+
+            // $photo->create();
+
+
+            echo INCLUDES_PATH;
+
+
+
 
             ?>
 
